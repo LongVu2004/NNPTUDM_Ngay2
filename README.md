@@ -1,7 +1,4 @@
-## Thông tin sinh viên
 
-| Thông tin | Chi tiết |
-| :--- | :--- |
 | **Họ và tên** | **Phạm Long Vũ** |
 | **MSSV** | **2280618021** |
     
