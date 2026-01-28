@@ -1,0 +1,340 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="main.js"></script>
+</head>
+<body>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>TITLE</th>
+                    <th>VIEWS</th>
+                </tr>
+            </thead>
+            <tbody id="body_table">
+               
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <input type="text" id="id_txt"/>
+        <input type="text" id="title_txt"/>
+        <input type="text" id="view_txt"/>
+        <input type="submit" value="Save" onclick="Save()">
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Posts & Comments</title>
+    <script src="main.js" defer></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+    
+        .section {
+            margin-bottom: 40px;
+            padding: 10px;
+            border: 1px solid #eee;
+        }
+    
+        h2 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+    
+        input[type="text"] {
+            padding: 5px;
+            margin: 5px;
+        }
+    
+        input[type="submit"],
+        button {
+            cursor: pointer;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h2>QUẢN LÝ POSTS</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>TITLE</th>
+                    <th>VIEWS</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody id="body_table">
+                </tbody>
+        </table>
+        
+        <div>
+            <h3>Form Post (Để trống ID để thêm mới)</h3>
+            <label>ID:</label> <input type="text" id="id_txt" placeholder="Tự động tạo mới" readonly style="background-color: #eee;" />
+            <label>Title:</label> <input type="text" id="title_txt" placeholder="Nhập tiêu đề" />
+            <label>View:</label> <input type="text" id="view_txt" placeholder="Nhập lượt xem" />
+            <input type="submit" value="Save Post" onclick="Save()">
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>QUẢN LÝ COMMENTS</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>NỘI DUNG (TEXT)</th>
+                    <th>POST ID</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody id="body_comments">
+                </tbody>
+        </table>
+
+        <div>
+            <h3>Form Comment (Để trống ID để thêm mới)</h3>
+            <label>ID:</label> <input type="text" id="cmt_id_txt" placeholder="Tự động tạo mới" readonly style="background-color: #eee;"/>
+            <label>Text:</label> <input type="text" id="cmt_text_txt" placeholder="Nhập nội dung"/>
+            <label>Post ID:</label> <input type="text" id="cmt_postid_txt" placeholder="Thuộc về bài viết số..."/>
+            <input type="submit" value="Save Comment" onclick="SaveComment()">
+        </div>
+    </div>
+</body>
+</html> 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Posts & Comments</title>
+    <script src="main.js"></script>
+
+    <style>
+        /* Cấu hình chung cho toàn trang */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Box chứa từng phần (Section) */
+        .section {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #444;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Bảng dữ liệu */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            background-color: #f1f1f1;
+            color: #555;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background-color: #fcfcfc;
+        }
+
+        /* Khu vực Form nhập liệu */
+        .form-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-container h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Group các input để thẳng hàng đẹp hơn */
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #666;
+        }
+
+        /* Style riêng cho nút Save */
+        input[type="submit"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            height: 40px;
+            align-self: flex-end; /* Căn nút xuống đáy để thẳng hàng với input */
+            transition: background-color 0.2s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        /* Style cho nút Delete/Edit trong bảng (nếu có class từ JS hoặc mặc định) */
+        input[type="submit"][value="Delete"], 
+        input[type="submit"][value="Edit"],
+        button {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            margin-right: 5px;
+            background-color: #eee;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        
+        input[type="submit"][value="Delete"]:hover {
+            background-color: #ffecec;
+            border-color: #ffcccc;
+            color: #d00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="section">
+        <div class="form-container">
+            <h3>Thông tin Post (Nhập ID để sửa, để trống để tạo mới)</h3>
+            <div class="input-group">
+                <div class="input-item">
+                    <label>ID</label>
+                    <input type="text" id="id_txt" placeholder="Auto" style="width: 80px;"/>
+                </div>
+                <div class="input-item" style="flex-grow: 2;">
+                    <label>Title</label>
+                    <input type="text" id="title_txt" placeholder="Nhập tiêu đề bài viết"/>
+                </div>
+                <div class="input-item" style="flex-grow: 1;">
+                    <label>Views</label>
+                    <input type="text" id="view_txt" placeholder="Lượt xem"/>
+                </div>
+                <input type="submit" value="Save Post" onclick="Save()"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>QUẢN LÝ COMMENTS</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 50%;">NỘI DUNG</th>
+                    <th style="width: 20%;">POST ID</th>
+                    <th style="width: 20%;">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody id="body_comments">
+                </tbody>
+        </table>
+
+        <div class="form-container">
+            <h3>Thông tin Comment (Nhập ID để sửa, để trống để tạo mới)</h3>
+            <div class="input-group">
+                <div class="input-item">
+                    <label>ID</label>
+                    <input type="text" id="cmt_id_txt" placeholder="Auto" style="width: 80px;"/>
+                </div>
+                <div class="input-item" style="flex-grow: 2;">
+                    <label>Nội dung</label>
+                    <input type="text" id="cmt_text_txt" placeholder="Nhập nội dung bình luận"/>
+                </div>
+                <div class="input-item" style="flex-grow: 1;">
+                    <label>Post ID</label>
+                    <input type="text" id="cmt_postid_txt" placeholder="Của bài viết số..."/>
+                </div>
+                <input type="submit" value="Save Comment" onclick="SaveComment()">
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
